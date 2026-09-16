@@ -16,8 +16,8 @@ import {
   SatelliteDish,
   ScanEye,
   Orbit,
-  Globe,
-  Gauge,
+  Megaphone,
+  Wallet,
 } from 'lucide-react'
 import { useAuth } from '@/components/auth-provider'
 import { BROKERS, storeBroker, type BrokerId } from '@/lib/brokers'
@@ -25,10 +25,8 @@ import { cn } from '@/lib/utils'
 
 const MORE_LINKS = [
   { label: 'Future Signals', href: '/future-signals', icon: Orbit },
-  { label: 'OTC Chart Analyzer', href: '/otc-chart-analyzer', icon: ScanLine },
-  { label: 'Real Chart Analyzer', href: '/real-chart-analyzer', icon: ScanSearch },
-  { label: 'News Signals', href: '/news-signals', icon: Globe },
-  { label: 'Management', href: '/management', icon: Gauge },
+  { label: 'News Signals', href: '/news-signals', icon: Megaphone },
+  { label: 'Management', href: '/management', icon: Wallet },
 ]
 
 const ANALYZERS = [

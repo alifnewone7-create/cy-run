@@ -12,8 +12,8 @@ import {
   ScanEye,
   SatelliteDish,
   Orbit,
-  Globe,
-  Gauge,
+  Megaphone,
+  Wallet,
   Syringe,
   LogOut,
   Menu,
@@ -34,8 +34,8 @@ const navLinks = [
   { label: 'Live Signals', href: '/live-signals', icon: SatelliteDish },
   { label: 'Coco Injector', href: '/injector', icon: Syringe },
   { label: 'Future Signals', href: '/future-signals', icon: Orbit },
-  { label: 'News Signals', href: '/news-signals', icon: Globe },
-  { label: 'Management', href: '/management', icon: Gauge },
+  { label: 'News Signals', href: '/news-signals', icon: Megaphone },
+  { label: 'Management', href: '/management', icon: Wallet },
 ]
 
 const ANALYZER_LINKS = [
@@ -61,12 +61,12 @@ const navSections = [
       { label: 'Live Signals', href: '/live-signals', icon: SatelliteDish },
       { label: 'Coco Injector', href: '/injector', icon: Syringe },
       { label: 'Future Signals', href: '/future-signals', icon: Orbit },
-      { label: 'News Signals', href: '/news-signals', icon: Globe },
+      { label: 'News Signals', href: '/news-signals', icon: Megaphone },
     ],
   },
   {
     heading: 'Management',
-    links: [{ label: 'Management', href: '/management', icon: Gauge }],
+    links: [{ label: 'Management', href: '/management', icon: Wallet }],
   },
 ]
 
