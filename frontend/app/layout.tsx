@@ -8,11 +8,14 @@ import {
 } from 'next/font/google'
 import { AuthProvider } from '@/components/auth-provider'
 import { UpgradeGateProvider } from '@/components/upgrade-gate'
+import { AssetCacheProvider } from '@/components/asset-cache-provider'
+import { AppLoader } from '@/components/app-loader'
 import './globals.css'
 import './coco.css'
 import './analysis-result.css'
 import './injector.css'
 import './signals.css'
+import './splash.css'
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
 const geistMono = Geist_Mono({
@@ -83,9 +86,12 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${schibsted.variable} ${schibstedBody.variable} ${techMono.variable}`}
     >
       <body className="bg-background font-sans antialiased">
-        <AuthProvider>
-          <UpgradeGateProvider>{children}</UpgradeGateProvider>
-        </AuthProvider>
+        <AssetCacheProvider>
+          <AppLoader />
+          <AuthProvider>
+            <UpgradeGateProvider>{children}</UpgradeGateProvider>
+          </AuthProvider>
+        </AssetCacheProvider>
       </body>
     </html>
   )

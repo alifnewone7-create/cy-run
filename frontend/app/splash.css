@@ -1,0 +1,205 @@
+/* ── Boot splash — mirrors the landing page (cosmic #0b0618) theme ── */
+
+.coco-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 70% at 50% -10%, rgba(190, 150, 255, 0.16), transparent 58%),
+    radial-gradient(90% 60% at 50% 0%, rgba(96, 52, 190, 0.34), transparent 62%),
+    #0b0618;
+  opacity: 1;
+  transition: opacity 560ms ease, visibility 560ms ease;
+}
+
+.coco-splash.is-hiding {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.coco-splash-glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(18px);
+  pointer-events: none;
+}
+
+.coco-splash-glow-a {
+  width: 46vw;
+  height: 46vw;
+  top: -14vw;
+  left: 6vw;
+  background: radial-gradient(closest-side, rgba(138, 76, 240, 0.45), transparent);
+  animation: coco-splash-float 9s ease-in-out infinite;
+}
+
+.coco-splash-glow-b {
+  width: 38vw;
+  height: 38vw;
+  bottom: -12vw;
+  right: 4vw;
+  background: radial-gradient(closest-side, rgba(62, 207, 255, 0.24), transparent);
+  animation: coco-splash-float 11s ease-in-out infinite reverse;
+}
+
+.coco-splash-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 62px 62px;
+  mask-image: radial-gradient(70% 60% at 50% 45%, #000 12%, transparent 72%);
+  -webkit-mask-image: radial-gradient(70% 60% at 50% 45%, #000 12%, transparent 72%);
+  pointer-events: none;
+}
+
+.coco-splash-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  padding: 32px;
+  text-align: center;
+}
+
+.coco-splash-orb {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 132px;
+  height: 132px;
+}
+
+.coco-splash-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 1px solid rgba(178, 140, 255, 0.35);
+  border-top-color: rgba(198, 160, 255, 0.95);
+  animation: coco-splash-spin 1.5s linear infinite;
+}
+
+.coco-splash-ring-2 {
+  inset: 12px;
+  border-color: rgba(120, 200, 255, 0.18);
+  border-bottom-color: rgba(120, 200, 255, 0.7);
+  animation-duration: 2.4s;
+  animation-direction: reverse;
+}
+
+.coco-splash-logo {
+  width: 84px;
+  height: 84px;
+  border-radius: 9999px;
+  object-fit: cover;
+  box-shadow: 0 18px 50px rgba(120, 60, 220, 0.45);
+  animation: coco-splash-pulse 2.6s ease-in-out infinite;
+}
+
+.coco-splash-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.coco-splash-title {
+  margin: 0;
+  font-family: var(--font-display), var(--font-geist-sans), sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #f4f0ff;
+}
+
+.coco-splash-title span {
+  background: linear-gradient(90deg, #c4a4ff, #8f7bff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.coco-splash-sub {
+  margin: 0;
+  font-family: var(--font-tech), monospace;
+  font-size: 12.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(214, 205, 244, 0.62);
+}
+
+.coco-splash-bar {
+  position: relative;
+  width: min(280px, 72vw);
+  height: 4px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.09);
+  overflow: hidden;
+}
+
+.coco-splash-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #7c4dff, #b98cff);
+  box-shadow: 0 0 18px rgba(150, 100, 255, 0.55);
+  transition: width 260ms ease;
+}
+
+.coco-splash-pct {
+  margin: 0;
+  font-family: var(--font-tech), monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: rgba(206, 196, 240, 0.5);
+}
+
+.coco-splash-preload {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes coco-splash-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes coco-splash-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 18px 50px rgba(120, 60, 220, 0.4);
+  }
+  50% {
+    transform: scale(1.045);
+    box-shadow: 0 22px 62px rgba(150, 90, 255, 0.6);
+  }
+}
+
+@keyframes coco-splash-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, 26px, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coco-splash-ring,
+  .coco-splash-logo,
+  .coco-splash-glow {
+    animation: none;
+  }
+}
