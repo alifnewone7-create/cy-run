@@ -24,7 +24,7 @@ export function AnalyzerView({ mode }: { mode: Mode }) {
 
           <div className="coco-dark min-h-dvh">
             <div className="relative overflow-hidden pt-0 md:pt-[84px]">
-              <CocoHeroBg />
+              <CocoHeroBg candles={false} />
 
               <div className="relative z-10 mx-auto flex max-w-[980px] flex-col gap-5 px-4 pb-32 pt-6 sm:px-6 sm:pt-8 md:pb-20">
                 <AnalyzerModeSwitch mode={mode} />

@@ -18,21 +18,27 @@ const CANDLES: [number, number, number, number][] = [
   [380, 16, 36, 1],
 ]
 
-export function CocoHeroBg() {
+/**
+ * `candles` renders the candle skyline that climbs up from the bottom edge.
+ * It is only used on the landing page and the dashboard.
+ */
+export function CocoHeroBg({ candles = true }: { candles?: boolean }) {
   return (
     <div className="coco-hero-bg" aria-hidden="true">
       <span className="coco-hero-glow coco-hero-glow-a" />
       <span className="coco-hero-glow coco-hero-glow-b" />
       <span className="coco-hero-glow coco-hero-glow-c" />
 
-      <svg className="coco-hero-candles" viewBox="0 0 400 130" preserveAspectRatio="none">
-        {CANDLES.map(([x, top, h, up]) => (
-          <g key={x} fill={up ? '#4ade80' : '#fb7185'} stroke={up ? '#4ade80' : '#fb7185'}>
-            <line x1={x + 5} y1={top - 9} x2={x + 5} y2={top + h + 9} strokeWidth="1" />
-            <rect x={x} y={top} width="10" height={h} rx="1.5" />
-          </g>
-        ))}
-      </svg>
+      {candles ? (
+        <svg className="coco-hero-candles" viewBox="0 0 400 130" preserveAspectRatio="none">
+          {CANDLES.map(([x, top, h, up]) => (
+            <g key={x} fill={up ? '#4ade80' : '#fb7185'} stroke={up ? '#4ade80' : '#fb7185'}>
+              <line x1={x + 5} y1={top - 9} x2={x + 5} y2={top + h + 9} strokeWidth="1" />
+              <rect x={x} y={top} width="10" height={h} rx="1.5" />
+            </g>
+          ))}
+        </svg>
+      ) : null}
     </div>
   )
 }

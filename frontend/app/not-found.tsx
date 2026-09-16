@@ -6,7 +6,7 @@ import { CocoHeroBg } from '@/components/coco/coco-hero-bg'
 export default function NotFound() {
   return (
     <div className="coco coco-dark relative flex min-h-dvh items-center justify-center overflow-hidden px-4 py-20">
-      <CocoHeroBg />
+      <CocoHeroBg candles={false} />
 
       <div className="relative z-10 flex flex-col items-center text-center">
         <span className="relative h-16 w-16 overflow-hidden rounded-2xl ring-1 ring-white/20">

@@ -33,7 +33,7 @@ export function CocoPageShell({
 
       <div className="coco-dark min-h-dvh">
         <div className="relative overflow-hidden pt-0 md:pt-[84px]">
-          <CocoHeroBg />
+          <CocoHeroBg candles={false} />
 
           <div
             className={`relative z-10 mx-auto flex w-full ${width} flex-col gap-5 px-4 pb-32 pt-6 sm:gap-6 sm:px-6 sm:pt-9 md:pb-20`}

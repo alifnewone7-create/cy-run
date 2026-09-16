@@ -42,7 +42,7 @@ export function AdminLogin({ onSuccess }: { onSuccess: () => void }) {
 
   return (
     <main className="coco coco-dark relative flex min-h-dvh items-center justify-center overflow-hidden px-4 py-12">
-      <CocoHeroBg />
+      <CocoHeroBg candles={false} />
       <div className="coco-d2-hero relative z-10 w-full max-w-sm !p-6 sm:!p-8">
         <span className="coco-d2-hero-line" aria-hidden="true" />
 
