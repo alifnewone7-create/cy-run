@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth, AUTH_STORAGE_KEY } from '@/components/auth-provider'
-import { CocoLoading } from '@/components/coco/coco-loading'
 
 /**
  * Wraps the login / registration pages. If the user is already authenticated
@@ -30,12 +29,9 @@ export function AuthRedirect({ children }: { children: React.ReactNode }) {
     }
   }, [loading, user, router])
 
-  // Show a loader while we redirect an authenticated user, or while a stored
-  // session is still being verified by Firebase — never the login form.
+  // No loading screen — stay blank for the split second before the redirect.
   if (user || (hadSession && loading)) {
-    return (
-      <CocoLoading />
-    )
+    return null
   }
 
   return <>{children}</>
