@@ -23,7 +23,6 @@ import {
   Mail,
   Copy,
   Check,
-  ChevronDown,
 } from 'lucide-react'
 import { useAuth } from '@/components/auth-provider'
 import { CocoBottomNav } from '@/components/coco/coco-bottom-nav'
@@ -79,7 +78,6 @@ export function TopNav({ bottomNav = true }: { bottomNav?: boolean } = {}) {
   const [profileOpen, setProfileOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [copied, setCopied] = useState(false)
-  const [analyzeOpen, setAnalyzeOpen] = useState(false)
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false)
   const [loggingOut, setLoggingOut] = useState(false)
 
@@ -91,26 +89,7 @@ export function TopNav({ bottomNav = true }: { bottomNav?: boolean } = {}) {
   useEffect(() => {
     setMenuOpen(false)
     setProfileOpen(false)
-    setAnalyzeOpen(false)
   }, [pathname])
-
-  // Close the Analyze dropdown on outside click / Escape
-  useEffect(() => {
-    if (!analyzeOpen) return
-    function onKey(event: KeyboardEvent) {
-      if (event.key === 'Escape') setAnalyzeOpen(false)
-    }
-    function onDown(event: MouseEvent) {
-      const target = event.target as HTMLElement
-      if (!target.closest('[data-analyze-menu]')) setAnalyzeOpen(false)
-    }
-    document.addEventListener('keydown', onKey)
-    document.addEventListener('mousedown', onDown)
-    return () => {
-      document.removeEventListener('keydown', onKey)
-      document.removeEventListener('mousedown', onDown)
-    }
-  }, [analyzeOpen])
 
   // Lock body scroll and enable Escape-to-close while the profile modal is open
   useEffect(() => {
@@ -244,15 +223,13 @@ export function TopNav({ bottomNav = true }: { bottomNav?: boolean } = {}) {
               )
             })}
 
-            {/* Analyze lives inside the same cluster — switch analyzer inside it */}
+            {/* One Analyze button — opens the OTC analyzer by default, and the
+                OTC/Real switch lives inside the analyzer page. */}
             <span className="nav-rail-sep" aria-hidden="true" />
 
-            <div className="relative" data-analyze-menu>
-            <button
-              type="button"
-              onClick={() => setAnalyzeOpen((v) => !v)}
-              aria-expanded={analyzeOpen}
-              aria-haspopup="menu"
+            <Link
+              href="/otc-chart-analyzer"
+              aria-current={analyzerOpenActive ? 'page' : undefined}
               className={cn(
                 'nav-analyze flex h-10 items-center gap-2 rounded-xl px-3.5 text-sm font-semibold',
                 analyzerOpenActive && 'is-active',
@@ -261,40 +238,7 @@ export function TopNav({ bottomNav = true }: { bottomNav?: boolean } = {}) {
             >
               <ScanEye className="h-[1.15rem] w-[1.15rem]" />
               Analyze
-              <ChevronDown
-                className={cn(
-                  'h-3.5 w-3.5 opacity-70 transition-transform duration-200',
-                  analyzeOpen && 'rotate-180',
-                )}
-              />
-            </button>
-
-            {analyzeOpen && (
-              <div
-                role="menu"
-                className="nav-analyze-menu absolute left-1/2 top-[calc(100%+14px)] z-[60] w-64 -translate-x-1/2 overflow-hidden rounded-2xl p-1.5"
-                data-testid="top-nav-analyze-menu"
-              >
-                {ANALYZER_LINKS.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    role="menuitem"
-                    onClick={() => setAnalyzeOpen(false)}
-                    className={cn(
-                      'nav-analyze-item flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium',
-                      pathname === link.href && 'is-active',
-                    )}
-                  >
-                    <span className="nav-analyze-item-icon flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
-                      <link.icon className="h-[1.05rem] w-[1.05rem]" />
-                    </span>
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-            )}
-            </div>
+            </Link>
           </div>
 
           {/* Profile (right) */}
