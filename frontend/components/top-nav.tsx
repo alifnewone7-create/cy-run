@@ -9,11 +9,12 @@ import {
   LayoutDashboard,
   ScanLine,
   ScanSearch,
-  Telescope,
-  Newspaper,
-  Radio,
+  ScanEye,
+  SatelliteDish,
+  Orbit,
+  Globe,
+  Gauge,
   Syringe,
-  SlidersHorizontal,
   LogOut,
   Menu,
   X,
@@ -22,20 +23,25 @@ import {
   Mail,
   Copy,
   Check,
+  ChevronDown,
 } from 'lucide-react'
 import { useAuth } from '@/components/auth-provider'
 import { CocoBottomNav } from '@/components/coco/coco-bottom-nav'
 import { cn } from '@/lib/utils'
 
+// Same icon language as the mobile bottom nav
 const navLinks = [
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  { label: 'Live Signals', href: '/live-signals', icon: SatelliteDish },
+  { label: 'Coco Injector', href: '/injector', icon: Syringe },
+  { label: 'Future Signals', href: '/future-signals', icon: Orbit },
+  { label: 'News Signals', href: '/news-signals', icon: Globe },
+  { label: 'Management', href: '/management', icon: Gauge },
+]
+
+const ANALYZER_LINKS = [
   { label: 'OTC Chart Analyzer', href: '/otc-chart-analyzer', icon: ScanLine },
   { label: 'Real Chart Analyzer', href: '/real-chart-analyzer', icon: ScanSearch },
-  { label: 'Future Signals', href: '/future-signals', icon: Telescope },
-  { label: 'News Signals', href: '/news-signals', icon: Newspaper },
-  { label: 'Live Signals', href: '/live-signals', icon: Radio },
-  { label: 'Coco Injector', href: '/injector', icon: Syringe },
-  { label: 'Management', href: '/management', icon: SlidersHorizontal },
 ]
 
 const navSections = [
@@ -53,15 +59,15 @@ const navSections = [
   {
     heading: 'Signal System',
     links: [
-      { label: 'Live Signals', href: '/live-signals', icon: Radio },
+      { label: 'Live Signals', href: '/live-signals', icon: SatelliteDish },
       { label: 'Coco Injector', href: '/injector', icon: Syringe },
-      { label: 'Future Signals', href: '/future-signals', icon: Telescope },
-      { label: 'News Signals', href: '/news-signals', icon: Newspaper },
+      { label: 'Future Signals', href: '/future-signals', icon: Orbit },
+      { label: 'News Signals', href: '/news-signals', icon: Globe },
     ],
   },
   {
     heading: 'Management',
-    links: [{ label: 'Management', href: '/management', icon: SlidersHorizontal }],
+    links: [{ label: 'Management', href: '/management', icon: Gauge }],
   },
 ]
 
@@ -73,6 +79,7 @@ export function TopNav({ bottomNav = true }: { bottomNav?: boolean } = {}) {
   const [profileOpen, setProfileOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [analyzeOpen, setAnalyzeOpen] = useState(false)
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false)
   const [loggingOut, setLoggingOut] = useState(false)
 
@@ -84,7 +91,26 @@ export function TopNav({ bottomNav = true }: { bottomNav?: boolean } = {}) {
   useEffect(() => {
     setMenuOpen(false)
     setProfileOpen(false)
+    setAnalyzeOpen(false)
   }, [pathname])
+
+  // Close the Analyze dropdown on outside click / Escape
+  useEffect(() => {
+    if (!analyzeOpen) return
+    function onKey(event: KeyboardEvent) {
+      if (event.key === 'Escape') setAnalyzeOpen(false)
+    }
+    function onDown(event: MouseEvent) {
+      const target = event.target as HTMLElement
+      if (!target.closest('[data-analyze-menu]')) setAnalyzeOpen(false)
+    }
+    document.addEventListener('keydown', onKey)
+    document.addEventListener('mousedown', onDown)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.removeEventListener('mousedown', onDown)
+    }
+  }, [analyzeOpen])
 
   // Lock body scroll and enable Escape-to-close while the profile modal is open
   useEffect(() => {
@@ -115,6 +141,7 @@ export function TopNav({ bottomNav = true }: { bottomNav?: boolean } = {}) {
   }, [logoutConfirmOpen])
 
   const firstName = profile?.name?.split(' ')[0] || 'Trader'
+  const analyzerOpenActive = ANALYZER_LINKS.some((l) => l.href === pathname)
 
   function requestLogout() {
     setLogoutConfirmOpen(true)
@@ -154,7 +181,7 @@ export function TopNav({ bottomNav = true }: { bottomNav?: boolean } = {}) {
   return (
     <>
     <header className="sticky top-0 z-50 hidden px-3 pt-3 sm:px-4 sm:pt-4 md:block">
-      <div className="border-luxe surface-luxe mx-auto max-w-6xl rounded-2xl shadow-[0_10px_40px_-12px_oklch(0.5_0.2_285_/_0.45)] backdrop-blur-xl">
+      <div className="nav-shell mx-auto max-w-6xl rounded-2xl backdrop-blur-xl">
         <nav className="flex items-center justify-between gap-4 px-3 py-2.5 sm:px-5 sm:py-3">
           {/* Mobile: hamburger (left) */}
           <button
@@ -189,7 +216,7 @@ export function TopNav({ bottomNav = true }: { bottomNav?: boolean } = {}) {
           </Link>
 
           {/* Desktop nav links */}
-          <div className="hidden items-center gap-1 rounded-2xl border border-border/60 bg-input/20 p-1 md:flex">
+          <div className="nav-rail hidden items-center gap-1 rounded-2xl p-1 md:flex">
             {navLinks.map((link) => {
               const active = pathname === link.href
               return (
@@ -216,6 +243,58 @@ export function TopNav({ bottomNav = true }: { bottomNav?: boolean } = {}) {
                 </Link>
               )
             })}
+
+            {/* Analyze lives inside the same cluster — switch analyzer inside it */}
+            <span className="nav-rail-sep" aria-hidden="true" />
+
+            <div className="relative" data-analyze-menu>
+            <button
+              type="button"
+              onClick={() => setAnalyzeOpen((v) => !v)}
+              aria-expanded={analyzeOpen}
+              aria-haspopup="menu"
+              className={cn(
+                'nav-analyze flex h-10 items-center gap-2 rounded-xl px-3.5 text-sm font-semibold',
+                analyzerOpenActive && 'is-active',
+              )}
+              data-testid="top-nav-analyze"
+            >
+              <ScanEye className="h-[1.15rem] w-[1.15rem]" />
+              Analyze
+              <ChevronDown
+                className={cn(
+                  'h-3.5 w-3.5 opacity-70 transition-transform duration-200',
+                  analyzeOpen && 'rotate-180',
+                )}
+              />
+            </button>
+
+            {analyzeOpen && (
+              <div
+                role="menu"
+                className="nav-analyze-menu absolute left-1/2 top-[calc(100%+14px)] z-[60] w-64 -translate-x-1/2 overflow-hidden rounded-2xl p-1.5"
+                data-testid="top-nav-analyze-menu"
+              >
+                {ANALYZER_LINKS.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    role="menuitem"
+                    onClick={() => setAnalyzeOpen(false)}
+                    className={cn(
+                      'nav-analyze-item flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium',
+                      pathname === link.href && 'is-active',
+                    )}
+                  >
+                    <span className="nav-analyze-item-icon flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
+                      <link.icon className="h-[1.05rem] w-[1.05rem]" />
+                    </span>
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+            </div>
           </div>
 
           {/* Profile (right) */}
@@ -225,7 +304,7 @@ export function TopNav({ bottomNav = true }: { bottomNav?: boolean } = {}) {
               onClick={() => setProfileOpen((v) => !v)}
               aria-label="Profile menu"
               aria-expanded={profileOpen}
-              className="flex items-center gap-2.5 rounded-2xl transition-all md:border md:border-border/60 md:bg-input/20 md:py-1 md:pl-1 md:pr-3 md:hover:bg-input/40"
+              className="nav-profile flex items-center gap-2.5 rounded-2xl transition-all md:py-1 md:pl-1 md:pr-3"
             >
               <span className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl ring-1 ring-primary/40 transition-transform hover:scale-105 md:hover:scale-100">
                 <Image

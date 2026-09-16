@@ -6,29 +6,29 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import {
   LayoutDashboard,
-  Radio,
-  Telescope,
   Menu,
   ScanLine,
   ScanSearch,
-  Newspaper,
-  SlidersHorizontal,
   LogOut,
   X,
   ChevronRight,
-  Crosshair,
   Syringe,
+  SatelliteDish,
+  ScanEye,
+  Orbit,
+  Globe,
+  Gauge,
 } from 'lucide-react'
 import { useAuth } from '@/components/auth-provider'
 import { BROKERS, storeBroker, type BrokerId } from '@/lib/brokers'
 import { cn } from '@/lib/utils'
 
 const MORE_LINKS = [
-  { label: 'Future Signals', href: '/future-signals', icon: Telescope },
+  { label: 'Future Signals', href: '/future-signals', icon: Orbit },
   { label: 'OTC Chart Analyzer', href: '/otc-chart-analyzer', icon: ScanLine },
   { label: 'Real Chart Analyzer', href: '/real-chart-analyzer', icon: ScanSearch },
-  { label: 'News Signals', href: '/news-signals', icon: Newspaper },
-  { label: 'Management', href: '/management', icon: SlidersHorizontal },
+  { label: 'News Signals', href: '/news-signals', icon: Globe },
+  { label: 'Management', href: '/management', icon: Gauge },
 ]
 
 const ANALYZERS = [
@@ -299,7 +299,7 @@ export function CocoBottomNav() {
           className={cn('coco-bnav-item', pathname === '/live-signals' && 'is-active')}
           data-testid="bottom-nav-live"
         >
-          <Radio className="h-[19px] w-[19px]" />
+          <SatelliteDish className="h-[19px] w-[19px]" />
           <span>Live</span>
         </Link>
 
@@ -311,7 +311,7 @@ export function CocoBottomNav() {
           data-testid="bottom-nav-analyzer"
         >
           <span className="coco-bnav-center-tile">
-            <Crosshair className="h-6 w-6" />
+            <ScanEye className="h-6 w-6" />
           </span>
           <span className="coco-bnav-center-label">Analyzer</span>
         </button>

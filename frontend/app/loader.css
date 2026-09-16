@@ -1,5 +1,11 @@
 /* ── Route loader — clean flat backdrop + smooth violet spinner ── */
 
+/* First-paint colour: matches the home page base so a reload never flashes a
+   different shade before the app renders. */
+html {
+  background-color: #0b0618;
+}
+
 .coco-load {
   display: flex;
   min-height: 100dvh;
@@ -7,9 +13,12 @@
   align-items: center;
   justify-content: center;
   gap: 16px;
-  background: #0b0618;
-  /* fade in gently so quick loads never flash */
-  animation: coco-load-enter 0.45s ease 0.12s both;
+  /* Same dark purple grading as the home page, painted on the first frame so
+     there is no flash of a different background before the loader appears. */
+  background:
+    radial-gradient(110% 65% at 50% -8%, rgba(190, 150, 255, 0.13), transparent 58%),
+    radial-gradient(85% 55% at 50% 0%, rgba(96, 52, 190, 0.26), transparent 62%),
+    #0b0618;
 }
 
 .coco-load-spinner {
@@ -35,19 +44,7 @@
   }
 }
 
-@keyframes coco-load-enter {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .coco-load {
-    animation: none;
-  }
   .coco-load-spinner {
     animation-duration: 2s;
   }
