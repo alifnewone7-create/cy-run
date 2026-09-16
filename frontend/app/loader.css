@@ -15,19 +15,6 @@
     #0b0618;
 }
 
-.coco-load::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
-  background-size: 62px 62px;
-  mask-image: radial-gradient(65% 55% at 50% 48%, #000 10%, transparent 72%);
-  -webkit-mask-image: radial-gradient(65% 55% at 50% 48%, #000 10%, transparent 72%);
-  pointer-events: none;
-}
-
 .coco-load-glow {
   position: absolute;
   width: 42vw;
