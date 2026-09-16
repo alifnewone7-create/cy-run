@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { AdminLogin } from '@/components/admin/admin-login'
 import { AdminDashboard } from '@/components/admin/admin-dashboard'
-import { Loader2 } from 'lucide-react'
+import { CocoLoading } from '@/components/coco/coco-loading'
 
 const ADMIN_FLAG = 'sx_admin_authed'
 
@@ -47,12 +47,7 @@ export function AdminPortal() {
 
   if (authed === null) {
     return (
-      <main className="coco coco-dark flex min-h-dvh items-center justify-center">
-        <div className="flex flex-col items-center gap-3 text-white/60">
-          <Loader2 className="h-6 w-6 animate-spin text-[#c4a6ff]" />
-          <p className="text-sm">Loading portal…</p>
-        </div>
-      </main>
+      <CocoLoading label="Loading portal" />
     )
   }
 

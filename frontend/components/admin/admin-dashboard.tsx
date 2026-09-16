@@ -131,7 +131,7 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   }
 
   return (
-    <main className="coco coco-dark relative flex min-h-dvh">
+    <main className="coco coco-dark admin-skin relative flex min-h-dvh">
       {/* Mobile backdrop */}
       {navOpen && (
         <button
@@ -145,14 +145,14 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
       {/* Sidebar */}
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r border-white/10 bg-[#140a33]/95 backdrop-blur-xl transition-transform duration-300 lg:static lg:z-0 lg:translate-x-0',
+          'admin-sidebar fixed inset-y-0 left-0 z-50 flex w-72 flex-col backdrop-blur-xl transition-transform duration-300 lg:static lg:z-0 lg:translate-x-0',
           navOpen ? 'translate-x-0' : '-translate-x-full',
         )}
       >
         {/* Logo */}
-        <div className="flex items-center justify-between gap-3 border-b border-border/60 px-5 py-4">
+        <div className="admin-divider flex items-center justify-between gap-3 px-5 py-4">
           <div className="flex items-center gap-2.5">
-            <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-xl ring-1 ring-border">
+            <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-xl">
               <Image
                 src="/coco-profile.png"
                 alt="Coco AI logo"
@@ -189,11 +189,10 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
                 key={item.key}
                 type="button"
                 onClick={() => goto(item.key)}
+                data-active={active}
                 className={cn(
-                  'flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-semibold transition-colors',
-                  active
-                    ? 'bg-primary/15 text-primary ring-1 ring-primary/25'
-                    : 'text-muted-foreground hover:bg-input/30 hover:text-foreground',
+                  'admin-nav-item flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-semibold transition-colors',
+                  active ? '' : 'text-muted-foreground hover:text-foreground',
                 )}
               >
                 <item.icon className="h-[18px] w-[18px]" />
@@ -209,7 +208,7 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
         </nav>
 
         {/* Sign out */}
-        <div className="border-t border-border/60 p-3">
+        <div className="admin-divider admin-divider-top p-3">
           <Button
             onClick={() => setConfirmLogout(true)}
             variant="outline"
@@ -224,7 +223,7 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
       {/* Content column */}
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Mobile topbar */}
-        <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-white/10 bg-[#120a2c]/85 px-4 py-3 backdrop-blur-xl lg:hidden">
+        <header className="admin-topbar admin-divider sticky top-0 z-30 flex items-center gap-3 px-4 py-3 backdrop-blur-xl lg:hidden">
           <button
             type="button"
             onClick={() => setNavOpen(true)}
@@ -234,7 +233,7 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
             <Menu className="h-5 w-5" />
           </button>
           <div className="flex items-center gap-2">
-            <span className="relative h-8 w-8 overflow-hidden rounded-lg ring-1 ring-border">
+            <span className="relative h-8 w-8 overflow-hidden rounded-lg">
               <Image
                 src="/coco-profile.png"
                 alt="Coco AI logo"
