@@ -1,0 +1,54 @@
+/* ── Route loader — clean flat backdrop + smooth violet spinner ── */
+
+.coco-load {
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: #0b0618;
+  /* fade in gently so quick loads never flash */
+  animation: coco-load-enter 0.45s ease 0.12s both;
+}
+
+.coco-load-spinner {
+  width: 34px;
+  height: 34px;
+  border-radius: 9999px;
+  border: 2.5px solid rgba(178, 140, 255, 0.16);
+  border-top-color: #8f6bff;
+  animation: coco-load-spin 0.8s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+}
+
+.coco-load-text {
+  margin: 0;
+  font-family: var(--font-body), var(--font-geist-sans), sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.01em;
+  color: rgba(214, 205, 244, 0.55);
+}
+
+@keyframes coco-load-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes coco-load-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coco-load {
+    animation: none;
+  }
+  .coco-load-spinner {
+    animation-duration: 2s;
+  }
+}

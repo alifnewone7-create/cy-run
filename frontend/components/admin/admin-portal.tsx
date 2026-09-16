@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { AdminLogin } from '@/components/admin/admin-login'
+import { CocoLoading } from '@/components/coco/coco-loading'
 import { AdminDashboard } from '@/components/admin/admin-dashboard'
 
 const ADMIN_FLAG = 'sx_admin_authed'
@@ -44,9 +45,8 @@ export function AdminPortal() {
     checkSession()
   }, [checkSession])
 
-  // No loading screen — nothing renders until the session check resolves.
   if (authed === null) {
-    return null
+    return <CocoLoading label="Loading portal..." />
   }
 
   if (!authed) {

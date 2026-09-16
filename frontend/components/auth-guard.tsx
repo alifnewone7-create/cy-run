@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth, type UserProfile } from '@/components/auth-provider'
+import { CocoLoading } from '@/components/coco/coco-loading'
 
 export function AuthGuard({
   children,
@@ -18,10 +19,8 @@ export function AuthGuard({
     }
   }, [loading, user, router])
 
-  // No loading screen: render nothing until the session is ready, then the
-  // page appears instantly.
   if (loading || !user || !profile) {
-    return null
+    return <CocoLoading />
   }
 
   return <>{children(profile)}</>

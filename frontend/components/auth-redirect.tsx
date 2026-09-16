@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth, AUTH_STORAGE_KEY } from '@/components/auth-provider'
+import { CocoLoading } from '@/components/coco/coco-loading'
 
 /**
  * Wraps the login / registration pages. If the user is already authenticated
@@ -29,9 +30,8 @@ export function AuthRedirect({ children }: { children: React.ReactNode }) {
     }
   }, [loading, user, router])
 
-  // No loading screen — stay blank for the split second before the redirect.
   if (user || (hadSession && loading)) {
-    return null
+    return <CocoLoading />
   }
 
   return <>{children}</>
