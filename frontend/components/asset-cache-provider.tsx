@@ -1,7 +1,13 @@
 'use client'
 
 import { useEffect } from 'react'
-import { cacheAsset, getCached, loadCache, normalize } from '@/lib/asset-cache'
+import {
+  cacheAsset,
+  getCached,
+  loadCache,
+  normalize,
+  warmAssetCache,
+} from '@/lib/asset-cache'
 
 /**
  * Swaps every <img> src with its cached data URL (when available) and caches
@@ -49,6 +55,9 @@ export function AssetCacheProvider({ children }: { children: React.ReactNode }) 
   useEffect(() => {
     loadCache()
     patchAll()
+
+    // Warm every image into localStorage in the background (no loading screen).
+    void warmAssetCache().then(() => patchAll())
 
     const observer = new MutationObserver((records) => {
       for (const record of records) {
