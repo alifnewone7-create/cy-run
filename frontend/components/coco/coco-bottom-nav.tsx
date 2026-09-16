@@ -18,6 +18,7 @@ import {
   Orbit,
   Megaphone,
   Wallet,
+  Sparkles,
 } from 'lucide-react'
 import { useAuth } from '@/components/auth-provider'
 import { BROKERS, storeBroker, type BrokerId } from '@/lib/brokers'
@@ -134,10 +135,7 @@ export function CocoBottomNav() {
             type="button"
             aria-label="Close menu"
             onClick={closeSheet}
-            className={cn(
-              'absolute inset-0 cursor-default bg-[#07041a]/80 transition-opacity duration-150',
-              closing && 'opacity-0',
-            )}
+            className={cn('coco-sheet-backdrop absolute inset-0 cursor-default', closing && 'opacity-0')}
           />
           <div
             className={cn(
@@ -163,7 +161,7 @@ export function CocoBottomNav() {
                   {...grabHandlers}
                 >
                   <p className="coco-mono text-[10px] uppercase tracking-[0.16em] text-white/45">
-                    Quick menu
+                    Menu
                   </p>
                   <button
                     type="button"
@@ -176,55 +174,59 @@ export function CocoBottomNav() {
                   </button>
                 </div>
 
-                <nav className="flex flex-col gap-1.5 px-3 pb-2">
+                <div className="px-3">
+                  <div className="coco-sheet-profile" data-testid="bottom-sheet-user">
+                    <span className="coco-sheet-avatar">
+                      <Image src="/coco-ai.jpg" alt="Coco AI" fill sizes="48px" className="object-cover" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="coco-sub truncate text-[16px] leading-tight text-white" data-testid="bottom-sheet-name">
+                        {profile?.name || 'Trader'}
+                      </p>
+                      <p className="coco-mono mt-1 truncate text-[10.5px] text-white/50" data-testid="bottom-sheet-email">
+                        {profile?.email || 'Signed in'}
+                      </p>
+                    </div>
+                    <span className="coco-sheet-plan" data-testid="bottom-sheet-plan">
+                      <Sparkles className="h-3 w-3" />
+                      {profile?.plan || 'free'}
+                    </span>
+                  </div>
+                </div>
+
+                <nav className="coco-sheet-grid px-3 pt-3">
                   {MORE_LINKS.map((l) => (
                     <Link
                       key={l.href}
                       href={l.href}
-                      className={cn('coco-sheet-link', pathname === l.href && 'is-active')}
+                      className={cn('coco-sheet-tile', pathname === l.href && 'is-active')}
                       data-testid={`bottom-nav-more-${l.href.replace(/\//g, '') || 'home'}`}
                     >
-                      <span className="coco-sheet-link-icon">
-                        <l.icon className="h-[18px] w-[18px]" />
+                      <span className="coco-sheet-tile-icon">
+                        <l.icon className="h-[19px] w-[19px]" />
                       </span>
-                      {l.label}
-                      <ChevronRight className="ml-auto h-4 w-4 text-white/30" />
+                      <span className="coco-sheet-tile-label">{l.label}</span>
                     </Link>
                   ))}
                 </nav>
 
-                {/* Operator identity sits at the bottom of the sheet */}
-                <div className="px-3 pt-2">
-                  <div className="coco-sheet-user" data-testid="bottom-sheet-user">
-                    <span className="relative h-11 w-11 flex-none overflow-hidden rounded-2xl ring-1 ring-white/15">
-                      <Image
-                        src="/coco-ai.jpg"
-                        alt="Coco AI"
-                        fill
-                        sizes="44px"
-                        className="object-cover"
-                      />
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="coco-sub truncate text-[15px] text-white">
-                        {profile?.name || 'Trader'}
-                      </p>
-                      <p className="coco-mono truncate text-[10px] uppercase tracking-[0.14em] text-[#c4a6ff]/85">
-                        {profile?.plan || 'free'} plan
-                      </p>
-                    </div>
-                  </div>
-
+                <div className="px-3 pt-3">
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="coco-sheet-logout mt-2.5"
+                    className="coco-sheet-logout"
                     data-testid="bottom-nav-logout"
                   >
                     <span className="coco-sheet-logout-icon">
-                      <LogOut className="h-[18px] w-[18px]" />
+                      <LogOut className="h-[17px] w-[17px]" />
                     </span>
-                    Log out
+                    <span className="min-w-0 flex-1 text-left">
+                      <span className="block text-[14px] font-semibold leading-tight">Log out</span>
+                      <span className="coco-mono mt-0.5 block text-[9.5px] uppercase tracking-[0.12em] text-[#ffb3ba]/60">
+                        Sign out of this device
+                      </span>
+                    </span>
+                    <ChevronRight className="h-4 w-4 text-[#ffb3ba]/50" />
                   </button>
                 </div>
               </>

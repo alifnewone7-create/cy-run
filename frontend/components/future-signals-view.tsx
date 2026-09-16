@@ -10,7 +10,7 @@ import {
   BrokerBar,
   BrokerLine,
   DirTag,
-  MarketGrid,
+  MarketSections,
   PrimaryButton,
   SearchBox,
   SegTabs,
@@ -151,77 +151,131 @@ function FutureStudio() {
       {phase !== 'result' && <BrokerBar broker={broker} onChange={setBroker} />}
 
       {phase === 'build' && (
-        <section className="inj-panel coco-rise" style={{ '--d': '80ms' } as React.CSSProperties} data-testid="future-build-step">
-          <SegTabs tab={tab} onTab={setTab} lockedTo={lockedType} testidPrefix="future" />
-          <SearchBox value={query} onChange={setQuery} testid="future-search" />
+        <>
+          <section className="inj-panel coco-rise" style={{ '--d': '80ms' } as React.CSSProperties} data-testid="future-build-step">
+            <SegTabs tab={tab} onTab={setTab} lockedTo={lockedType} testidPrefix="future" />
+            <SearchBox value={query} onChange={setQuery} testid="future-search" />
 
-          {lockedType && lockedType !== tab && (
-            <p className="fs-lock" data-testid="future-lock-hint">
-              {lockedType === 'otc' ? 'OTC Market' : 'Real Market'} is locked for this queue · clear the selection to switch.
-            </p>
-          )}
+            {lockedType && lockedType !== tab && (
+              <p className="fs-lock" data-testid="future-lock-hint">
+                {lockedType === 'otc' ? 'OTC Market' : 'Real Market'} is locked for this queue · clear the selection to switch.
+              </p>
+            )}
 
-          <MarketGrid
-            markets={filtered}
-            query={query}
-            onPick={toggle}
-            isSelected={(m) => Boolean(selected[m.id])}
-            isDisabled={(m) => Boolean(lockedType && lockedType !== m.type)}
-            testidPrefix="future"
-          />
+            <MarketSections
+              markets={filtered}
+              query={query}
+              onPick={toggle}
+              isSelected={(m) => Boolean(selected[m.id])}
+              isDisabled={(m) => Boolean(lockedType && lockedType !== m.type)}
+              testidPrefix="future"
+              variant="ticket"
+            />
+          </section>
 
-          <SelectedRow list={selectedList} onRemove={toggle} onClear={clearAll} />
+          <section className="inj-panel fs-setup coco-rise" style={{ '--d': '140ms' } as React.CSSProperties} data-testid="future-setup">
+            <div className="fs-setup-grid">
+              <div className="fs-setup-col">
+                <header className="fs-setup-head">
+                  <span className="inj-stat-icon">
+                    <Layers className="h-4 w-4" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="fs-setup-title">Selected markets</p>
+                    <p className="fs-count-sub">Tap a pair above to add or remove it</p>
+                  </div>
+                  <span className="fs-setup-badge coco-mono" data-testid="future-selected-count">
+                    {selectedList.length}
+                  </span>
+                </header>
+                <SelectedRow list={selectedList} onRemove={toggle} onClear={clearAll} />
+              </div>
 
-          <div className="fs-count" data-testid="future-count">
-            <div className="flex min-w-0 items-center gap-3">
-              <span className="inj-stat-icon">
-                <Hash className="h-4 w-4" />
-              </span>
-              <div className="min-w-0">
-                <p className="text-sm font-semibold text-white">How many signals?</p>
-                <p className="fs-count-sub">Each signal uses one daily credit</p>
+              <div className="fs-setup-col" data-testid="future-count">
+                <header className="fs-setup-head">
+                  <span className="inj-stat-icon">
+                    <Hash className="h-4 w-4" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="fs-setup-title">How many signals?</p>
+                    <p className="fs-count-sub">Each signal uses one daily credit</p>
+                  </div>
+                </header>
+                <div className="fs-count-controls">
+                  <div className="fs-presets">
+                    {PRESETS.map((p) => (
+                      <button key={p} type="button" onClick={() => setCount(p)} className="fs-preset" data-on={count === p} data-testid={`future-preset-${p}`}>
+                        {p}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="fs-stepper">
+                    <button type="button" onClick={() => setCount(clamp(count - 1))} disabled={count <= MIN} aria-label="Decrease signal count" data-testid="future-count-minus">
+                      <Minus className="h-4 w-4" />
+                    </button>
+                    <input
+                      type="number"
+                      inputMode="numeric"
+                      min={MIN}
+                      max={MAX}
+                      value={count}
+                      onChange={(e) => {
+                        const v = Number.parseInt(e.target.value, 10)
+                        if (!Number.isNaN(v)) setCount(clamp(v))
+                      }}
+                      aria-label="Signal count"
+                      data-testid="future-count-input"
+                    />
+                    <button type="button" onClick={() => setCount(clamp(count + 1))} disabled={count >= MAX} aria-label="Increase signal count" data-testid="future-count-plus">
+                      <Plus className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="fs-count-controls">
-              <div className="fs-presets">
-                {PRESETS.map((p) => (
-                  <button key={p} type="button" onClick={() => setCount(p)} className="fs-preset" data-on={count === p} data-testid={`future-preset-${p}`}>
-                    {p}
-                  </button>
-                ))}
-              </div>
-              <div className="fs-stepper">
-                <button type="button" onClick={() => setCount(clamp(count - 1))} disabled={count <= MIN} aria-label="Decrease signal count" data-testid="future-count-minus">
-                  <Minus className="h-4 w-4" />
-                </button>
-                <input
-                  type="number"
-                  inputMode="numeric"
-                  min={MIN}
-                  max={MAX}
-                  value={count}
-                  onChange={(e) => {
-                    const v = Number.parseInt(e.target.value, 10)
-                    if (!Number.isNaN(v)) setCount(clamp(v))
-                  }}
-                  aria-label="Signal count"
-                  data-testid="future-count-input"
-                />
-                <button type="button" onClick={() => setCount(clamp(count + 1))} disabled={count >= MAX} aria-label="Increase signal count" data-testid="future-count-plus">
-                  <Plus className="h-4 w-4" />
-                </button>
-              </div>
+          </section>
+
+          <div className="fs-dock" data-testid="future-dock">
+            <div className="fs-dock-sum">
+              {selectedList.length > 0 ? (
+                <>
+                  <span className="fs-flag-stack" aria-hidden="true">
+                    {selectedList.slice(0, 3).map((m) => (
+                      <PairFlags key={m.id} base={m.base} quote={m.quote} size={18} />
+                    ))}
+                    {selectedList.length > 3 && <span className="fs-flag-more">+{selectedList.length - 3}</span>}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="fs-dock-title" data-testid="future-dock-summary">
+                      {selectedList.length} pair{selectedList.length > 1 ? 's' : ''} · {count} signal{count > 1 ? 's' : ''}
+                    </span>
+                    <span className="fs-dock-sub">{lockedType === 'otc' ? 'OTC Market' : 'Real Market'} · {broker.name}</span>
+                  </span>
+                </>
+              ) : (
+                <span className="min-w-0">
+                  <span className="fs-dock-title" data-testid="future-dock-summary">
+                    No markets yet
+                  </span>
+                  <span className="fs-dock-sub">Pick at least one pair to build a queue</span>
+                </span>
+              )}
             </div>
+            <PrimaryButton onClick={generate} disabled={selectedList.length === 0 || busy} icon={Waypoints} testid="future-generate-button">
+              {busy ? (
+                'Preparing…'
+              ) : (
+                <>
+                  <span className="sm:hidden">Generate {count}</span>
+                  <span className="hidden sm:inline">
+                    Generate {count} Future Signal{count > 1 ? 's' : ''}
+                  </span>
+                </>
+              )}
+            </PrimaryButton>
           </div>
-
-          <PrimaryButton onClick={generate} disabled={selectedList.length === 0 || busy} icon={Waypoints} testid="future-generate-button">
-            {busy
-              ? 'Preparing…'
-              : selectedList.length === 0
-                ? 'Select markets to build a queue'
-                : `Generate ${count} Future Signal${count > 1 ? 's' : ''}`}
-          </PrimaryButton>
-        </section>
+          <div className="h-16 md:hidden" aria-hidden="true" />
+        </>
       )}
 
       {phase === 'analyzing' && (
@@ -263,21 +317,12 @@ function SelectedRow({ list, onRemove, onClear }: { list: Market[]; onRemove: (m
   if (list.length === 0) {
     return (
       <p className="fs-selected-empty" data-testid="future-selected-empty">
-        Tap pairs above to build your queue.
+        No pairs selected yet — your queue will appear here.
       </p>
     )
   }
   return (
     <div className="fs-selected" data-testid="future-selected">
-      <div className="flex items-center justify-between gap-3">
-        <p className="inj-kicker inj-kicker-soft">
-          Selected · {list.length} market{list.length > 1 ? 's' : ''}
-        </p>
-        <button type="button" onClick={onClear} className="inj-btn-ghost" data-testid="future-clear-selected">
-          <X className="h-3.5 w-3.5" />
-          Clear
-        </button>
-      </div>
       <div className="fs-chips">
         {list.map((m) => (
           <span key={m.id} className="fs-chip" data-testid={`future-chip-${m.base}${m.quote}`}>
@@ -289,6 +334,10 @@ function SelectedRow({ list, onRemove, onClear }: { list: Market[]; onRemove: (m
           </span>
         ))}
       </div>
+      <button type="button" onClick={onClear} className="fs-clear" data-testid="future-clear-selected">
+        <X className="h-3 w-3" />
+        Clear all
+      </button>
     </div>
   )
 }

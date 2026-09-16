@@ -10,7 +10,7 @@ import {
   BrokerBar,
   BrokerLine,
   DirTag,
-  MarketGrid,
+  MarketSections,
   MarketHeader,
   PrimaryButton,
   SearchBox,
@@ -141,7 +141,7 @@ function LiveStudio() {
         <section className="inj-panel coco-rise" style={{ '--d': '80ms' } as React.CSSProperties} data-testid="live-market-step">
           <SegTabs tab={tab} onTab={setTab} testidPrefix="live" />
           <SearchBox value={query} onChange={setQuery} testid="live-search" />
-          <MarketGrid markets={filtered} query={query} onPick={pickMarket} testidPrefix="live" />
+          <MarketSections markets={filtered} query={query} onPick={pickMarket} testidPrefix="live" variant="list" />
         </section>
       )}
 

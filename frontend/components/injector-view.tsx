@@ -8,7 +8,7 @@ import { InjectorChart } from '@/components/injector-chart'
 import {
   AnalyzingStage,
   DirTag,
-  MarketGrid,
+  MarketSections,
   MarketHeader,
   PrimaryButton,
   SearchBox,
@@ -149,7 +149,7 @@ function InjectorStudio() {
         <section className="inj-panel coco-rise" style={{ '--d': '80ms' } as React.CSSProperties} data-testid="injector-market-step">
           <SegTabs tab={tab} onTab={setTab} testidPrefix="injector" />
           <SearchBox value={query} onChange={setQuery} testid="injector-search" />
-          <MarketGrid markets={filtered} query={query} onPick={pickMarket} testidPrefix="injector" />
+          <MarketSections markets={filtered} query={query} onPick={pickMarket} testidPrefix="injector" variant="chips" />
         </section>
       )}
 

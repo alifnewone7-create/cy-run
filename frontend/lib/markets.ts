@@ -27,18 +27,46 @@ export const currencyCountry: Record<string, string> = {
 }
 
 export type MarketType = 'otc' | 'real'
+export type MarketCategory = 'major' | 'minor' | 'exotic'
 
 export type Market = {
   id: string
   base: string
   quote: string
   type: MarketType
+  category: MarketCategory
+}
+
+const MAJORS = new Set(['EUR/USD', 'GBP/USD', 'USD/JPY', 'USD/CHF', 'USD/CAD', 'AUD/USD', 'NZD/USD'])
+const EXOTIC_CCY = new Set(['BDT', 'COP', 'PHP', 'PKR', 'DZD', 'ARS', 'EGP', 'ZAR', 'BRL', 'IDR', 'INR', 'MXN', 'NGN'])
+
+function categorize(base: string, quote: string): MarketCategory {
+  if (EXOTIC_CCY.has(base) || EXOTIC_CCY.has(quote)) return 'exotic'
+  if (MAJORS.has(`${base}/${quote}`)) return 'major'
+  return 'minor'
+}
+
+export const CATEGORY_ORDER: MarketCategory[] = ['major', 'minor', 'exotic']
+
+export const CATEGORY_META: Record<MarketCategory, { label: string; hint: string; short: string }> = {
+  major: { label: 'Major pairs', hint: 'Highest liquidity · USD crosses', short: 'Major' },
+  minor: { label: 'Minor pairs', hint: 'Cross rates without USD', short: 'Minor' },
+  exotic: { label: 'Exotic pairs', hint: 'Emerging-market currencies', short: 'Exotic' },
+}
+
+export type MarketSection = { category: MarketCategory; markets: Market[] }
+
+export function groupMarkets(markets: Market[]): MarketSection[] {
+  return CATEGORY_ORDER.map((category) => ({
+    category,
+    markets: markets.filter((m) => m.category === category),
+  })).filter((s) => s.markets.length > 0)
 }
 
 function build(pairs: string[], type: MarketType): Market[] {
   return pairs.map((p) => {
     const [base, quote] = p.split('/')
-    return { id: `${type}:${p}`, base, quote, type }
+    return { id: `${type}:${p}`, base, quote, type, category: categorize(base, quote) }
   })
 }
 

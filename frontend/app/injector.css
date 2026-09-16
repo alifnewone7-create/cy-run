@@ -162,127 +162,7 @@
   color: rgba(214, 200, 255, 0.4);
 }
 
-/* ── market grid ── */
-.inj-grid-wrap {
-  padding: 10px;
-  border-radius: 18px;
-  border: 1px solid var(--inj-line);
-  background: rgba(12, 6, 32, 0.32);
-}
-.inj-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  max-height: min(58dvh, 520px);
-  overflow-y: auto;
-  padding-right: 4px;
-}
-@media (min-width: 640px) {
-  .inj-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-@media (min-width: 1024px) {
-  .inj-grid {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-}
-.inj-tile {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  aspect-ratio: 1;
-  padding: 8px;
-  border-radius: 14px;
-  border: 1px solid var(--inj-line);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
-  color: var(--inj-soft);
-  opacity: 0;
-  animation: inj-pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms) forwards;
-  transition:
-    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.25s ease,
-    background-color 0.25s ease,
-    box-shadow 0.25s ease;
-}
-.inj-tile::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(70% 60% at 50% 0%, rgba(var(--inj-iris-rgb), 0.28), transparent 70%);
-  opacity: 0;
-  transition: opacity 0.25s ease;
-  pointer-events: none;
-}
-.inj-tile:hover {
-  transform: translateY(-3px);
-  border-color: var(--inj-line-strong);
-  box-shadow: rgba(var(--inj-iris-rgb), 0.35) 0 14px 28px -16px;
-  color: #fff;
-}
-.inj-tile:hover::after {
-  opacity: 1;
-}
-.inj-tile:active {
-  transform: translateY(-1px) scale(0.98);
-}
-.inj-tile-flags {
-  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.inj-tile:hover .inj-tile-flags {
-  transform: scale(1.08);
-}
-.inj-tile-label {
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  text-align: center;
-  font-size: 11.5px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-.inj-tile:disabled {
-  cursor: not-allowed;
-  opacity: 0.32;
-  transform: none;
-}
-.inj-tile:disabled::after {
-  display: none;
-}
-.inj-tile[data-on='true'] {
-  border-color: rgba(var(--inj-iris-rgb), 0.75);
-  color: #fff;
-  background:
-    radial-gradient(80% 60% at 50% 0%, rgba(var(--inj-iris-rgb), 0.32), transparent 70%),
-    linear-gradient(180deg, rgba(var(--inj-iris-rgb), 0.18), rgba(var(--inj-iris-rgb), 0.06));
-  box-shadow:
-    rgba(var(--inj-iris-rgb), 0.45) 0 14px 30px -18px,
-    rgba(var(--inj-iris-rgb), 0.4) 0 0 0 1px inset;
-}
-.inj-tile-check {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  display: grid;
-  place-items: center;
-  height: 16px;
-  width: 16px;
-  border-radius: 999px;
-  border: 1px solid var(--inj-line-strong);
-  color: transparent;
-  transition: background-image 0.2s ease, color 0.2s ease, transform 0.2s ease;
-}
-.inj-tile[data-on='true'] .inj-tile-check {
-  background-image: linear-gradient(180deg, #9a66ff, #6d3bff);
-  border-color: transparent;
-  color: #fff;
-  transform: scale(1.1);
-}
+/* ── market list (see signals.css "mk-") ── */
 .inj-empty {
   grid-column: 1 / -1;
   padding: 32px 0;
@@ -1012,7 +892,7 @@
   color: #fff;
 }
 @media (prefers-reduced-motion: reduce) {
-  .inj-tile,
+  .mk-item,
   .inj-dur,
   .inj-candle,
   .inj-chart-area,

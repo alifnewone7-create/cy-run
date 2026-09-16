@@ -16,10 +16,15 @@ import {
   Check,
   X,
   Building2,
+  ChevronRight,
+  Crown,
+  Shuffle,
+  Globe2,
+  Zap,
 } from 'lucide-react'
 import { PairFlags } from '@/components/pair-flags'
 import { AnalyzeFlow } from '@/components/analyze-flow'
-import { marketLabel, type Market, type MarketType } from '@/lib/markets'
+import { CATEGORY_META, groupMarkets, marketLabel, type Market, type MarketCategory, type MarketType } from '@/lib/markets'
 import { BROKERS, readStoredBroker, storeBroker, getBroker, type Broker, type BrokerId } from '@/lib/brokers'
 
 export type Direction = 'UP' | 'DOWN'
@@ -222,13 +227,22 @@ export function useMarketFilter(markets: Market[], query: string) {
   }, [markets, query])
 }
 
-export function MarketGrid({
+export type MarketVariant = 'list' | 'chips' | 'ticket'
+
+const CATEGORY_ICON: Record<MarketCategory, React.ComponentType<{ className?: string }>> = {
+  major: Crown,
+  minor: Shuffle,
+  exotic: Globe2,
+}
+
+export function MarketSections({
   markets,
   query,
   onPick,
   isSelected,
   isDisabled,
   testidPrefix,
+  variant,
 }: {
   markets: Market[]
   query: string
@@ -236,38 +250,137 @@ export function MarketGrid({
   isSelected?: (m: Market) => boolean
   isDisabled?: (m: Market) => boolean
   testidPrefix: string
+  variant: MarketVariant
 }) {
+  const sections = useMemo(() => groupMarkets(markets), [markets])
+  let index = 0
+
   return (
-    <div className="inj-grid-wrap">
-      <div className="inj-grid scroll-rail" data-testid={`${testidPrefix}-market-grid`}>
-        {markets.map((m, i) => {
-          const on = isSelected?.(m) ?? false
-          const off = isDisabled?.(m) ?? false
+    <div className="mk" data-variant={variant}>
+      <div className="mk-scroll scroll-rail" data-testid={`${testidPrefix}-market-grid`}>
+        {sections.map((s) => {
+          const Icon = CATEGORY_ICON[s.category]
+          const meta = CATEGORY_META[s.category]
           return (
-            <button
-              key={m.id}
-              type="button"
-              onClick={() => onPick(m)}
-              disabled={off}
-              aria-pressed={isSelected ? on : undefined}
-              className="inj-tile"
-              data-on={on}
-              style={{ '--d': `${Math.min(i, 24) * 30}ms` } as React.CSSProperties}
-              data-testid={`${testidPrefix}-market-${m.type}-${m.base}${m.quote}`}
-            >
-              {isSelected && (
-                <span className="inj-tile-check" aria-hidden="true">
-                  <Check className="h-3 w-3" />
+            <section key={s.category} className="mk-section" data-testid={`${testidPrefix}-section-${s.category}`}>
+              <header className="mk-head">
+                <span className="mk-head-icon">
+                  <Icon className="h-3.5 w-3.5" />
                 </span>
-              )}
-              <PairFlags base={m.base} quote={m.quote} size={22} className="inj-tile-flags" />
-              <span className="inj-tile-label">{marketLabel(m)}</span>
-            </button>
+                <span className="mk-head-text">
+                  <span className="mk-head-title">{meta.label}</span>
+                  <span className="mk-head-hint">{meta.hint}</span>
+                </span>
+                <span className="mk-head-count coco-mono">{s.markets.length}</span>
+              </header>
+              <div className="mk-grid">
+                {s.markets.map((m) => {
+                  const i = index++
+                  const on = isSelected?.(m) ?? false
+                  const off = isDisabled?.(m) ?? false
+                  return (
+                    <MarketItem
+                      key={m.id}
+                      market={m}
+                      variant={variant}
+                      on={on}
+                      off={off}
+                      selectable={Boolean(isSelected)}
+                      delay={Math.min(i, 28) * 22}
+                      onPick={onPick}
+                      testid={`${testidPrefix}-market-${m.type}-${m.base}${m.quote}`}
+                    />
+                  )
+                })}
+              </div>
+            </section>
           )
         })}
         {markets.length === 0 && <p className="inj-empty">No markets match “{query}”.</p>}
       </div>
     </div>
+  )
+}
+
+function MarketItem({
+  market: m,
+  variant,
+  on,
+  off,
+  selectable,
+  delay,
+  onPick,
+  testid,
+}: {
+  market: Market
+  variant: MarketVariant
+  on: boolean
+  off: boolean
+  selectable: boolean
+  delay: number
+  onPick: (m: Market) => void
+  testid: string
+}) {
+  const pair = `${m.base}/${m.quote}`
+  const typeTag = m.type === 'otc' ? 'OTC' : 'Real'
+  const short = CATEGORY_META[m.category].short
+
+  return (
+    <button
+      type="button"
+      onClick={() => onPick(m)}
+      disabled={off}
+      aria-pressed={selectable ? on : undefined}
+      className="mk-item"
+      data-on={on}
+      style={{ '--d': `${delay}ms` } as React.CSSProperties}
+      data-testid={testid}
+    >
+      {variant === 'list' && (
+        <>
+          <PairFlags base={m.base} quote={m.quote} size={26} className="mk-flags" />
+          <span className="mk-body">
+            <span className="mk-pair">{pair}</span>
+            <span className="mk-sub">
+              {typeTag} · {short}
+            </span>
+          </span>
+          <span className="mk-live" aria-hidden="true">
+            <i />
+            1m
+          </span>
+          <ChevronRight className="mk-arrow h-4 w-4" aria-hidden="true" />
+        </>
+      )}
+
+      {variant === 'chips' && (
+        <>
+          <span className="mk-chip-rail" aria-hidden="true" />
+          <PairFlags base={m.base} quote={m.quote} size={20} className="mk-flags" />
+          <span className="mk-body">
+            <span className="mk-pair">{pair}</span>
+            <span className="mk-sub">{typeTag}</span>
+          </span>
+          <Zap className="mk-bolt h-3.5 w-3.5" aria-hidden="true" />
+        </>
+      )}
+
+      {variant === 'ticket' && (
+        <>
+          <span className="mk-ticket-top">
+            <PairFlags base={m.base} quote={m.quote} size={22} className="mk-flags" />
+            <span className="mk-check" aria-hidden="true">
+              <Check className="h-3 w-3" strokeWidth={3} />
+            </span>
+          </span>
+          <span className="mk-pair">{pair}</span>
+          <span className="mk-sub">
+            {typeTag} · {short}
+          </span>
+          <span className="mk-ticket-perf" aria-hidden="true" />
+        </>
+      )}
+    </button>
   )
 }
 
