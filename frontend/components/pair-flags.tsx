@@ -23,6 +23,7 @@ export function PairFlags({
         src={flagUrl(base)}
         alt=""
         loading="lazy"
+        crossOrigin="anonymous"
         className="absolute left-0 rounded-full object-cover ring-2 ring-background"
         style={{ width: size, height: size }}
       />
@@ -30,6 +31,7 @@ export function PairFlags({
         src={flagUrl(quote)}
         alt=""
         loading="lazy"
+        crossOrigin="anonymous"
         className="absolute rounded-full object-cover ring-2 ring-background"
         style={{ width: size, height: size, left: size - overlap }}
       />

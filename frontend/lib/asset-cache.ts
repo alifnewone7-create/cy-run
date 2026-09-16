@@ -27,7 +27,7 @@ const FLAG_CODES = [
   'ma', 'dz', 'tn', 'eg', 'sa', 'ae', 'ru', 'no', 'se', 'pl',
 ]
 
-export const FLAG_ASSETS = FLAG_CODES.map((c) => `https://flagcdn.com/${c}.svg`)
+export const FLAG_ASSETS = FLAG_CODES.map((c) => (c === 'eu' ? '/flags/eu.svg' : `https://flagcdn.com/${c}.svg`))
 
 export const ALL_ASSETS = [...CORE_ASSETS, ...FLAG_ASSETS]
 

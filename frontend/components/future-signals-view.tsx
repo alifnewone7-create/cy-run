@@ -262,16 +262,7 @@ function FutureStudio() {
               )}
             </div>
             <PrimaryButton onClick={generate} disabled={selectedList.length === 0 || busy} icon={Waypoints} testid="future-generate-button">
-              {busy ? (
-                'Preparing…'
-              ) : (
-                <>
-                  <span className="sm:hidden">Generate {count}</span>
-                  <span className="hidden sm:inline">
-                    Generate {count} Future Signal{count > 1 ? 's' : ''}
-                  </span>
-                </>
-              )}
+              {busy ? 'Preparing…' : `Generate ${count} Signal${count > 1 ? 's' : ''}`}
             </PrimaryButton>
           </div>
           <div className="h-16 md:hidden" aria-hidden="true" />

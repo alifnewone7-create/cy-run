@@ -155,7 +155,9 @@ export function marketLabel(m: Market): string {
   return m.type === 'otc' ? `${m.base}/${m.quote} (OTC)` : `${m.base}/${m.quote}`
 }
 
+const LOCAL_FLAGS = new Set(['eu'])
+
 export function flagUrl(currency: string): string {
   const code = currencyCountry[currency] ?? 'un'
-  return `https://flagcdn.com/${code}.svg`
+  return LOCAL_FLAGS.has(code) ? `/flags/${code}.svg` : `https://flagcdn.com/${code}.svg`
 }
